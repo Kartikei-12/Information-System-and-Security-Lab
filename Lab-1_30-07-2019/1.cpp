@@ -63,7 +63,7 @@ public:
     void encrypt_file(string input, string output)
     {
         char temp;
-        uint64_t size = file_size(input); 
+        uint64_t size = file_size(input);
         ifstream input_file(input.c_str(), std::ios::binary);
         ofstream output_file(output.c_str(), std::ios::binary);
         if(!input_file.is_open())
