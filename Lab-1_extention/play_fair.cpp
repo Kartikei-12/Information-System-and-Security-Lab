@@ -162,32 +162,32 @@ public:
 
 int main() try
 {
-    Play_Fair_Cipher pf("ASDFg");
-    pf.encrypt_file("a.txt", "b.txt");
-    pf.decrypt_file("b.txt", "c.txt");
-    // string k; int a;
-    // string i, o;
-    // cout<<"Hello! --"<<endl;
-    // cout<<"Enter key file: "; cin>>k;
-    // Play_Fair_Cipher cc(read_file(k));
-    // cout<<"Enter Input file: ";
-    // cin>>i;
-    // cout<<"Enter Output file: ";
-    // cin>>o;
-    // cout<<"--------------------"<<endl
-    //     <<"1. Encrypt"<<endl
-    //     <<"2. Decrypt"<<endl
-    //     <<"\tChoose: ";
-    // cin>>a;
-    // if(a!=1 && a!=2)
-    // {
-    //     cout<<"Invalid choice.";
-    //     return 0;
-    // }
-    // if(a==1)
-    //     cc.encrypt_file(i, o);
-    // else
-    //     cc.decrypt_file(i, o);
+    // Play_Fair_Cipher pf("ASDFg");
+    // pf.encrypt_file("a.txt", "b.txt");
+    // pf.decrypt_file("b.txt", "c.txt");
+    string k; int a;
+    string i, o;
+    cout<<"Hello! --"<<endl;
+    cout<<"Enter key file: "; cin>>k;
+    Play_Fair_Cipher cc(read_file(k));
+    cout<<"Enter Input file: ";
+    cin>>i;
+    cout<<"Enter Output file: ";
+    cin>>o;
+    cout<<"--------------------"<<endl
+        <<"1. Encrypt"<<endl
+        <<"2. Decrypt"<<endl
+        <<"\tChoose: ";
+    cin>>a;
+    if(a!=1 && a!=2)
+    {
+        cout<<"Invalid choice.";
+        return 0;
+    }
+    if(a==1)
+        cc.encrypt_file(i, o);
+    else
+        cc.decrypt_file(i, o);
     cout<<"Done";
     return 0;
 }
