@@ -246,12 +246,6 @@ public:
                 temp.push_back(u_data[i+j]);
             data_matrix.mat.push_back(temp);
         }
-        
-        // cout<<"\n-------------------------------------------------------\n";
-        // cout<<"\nData Matrix\n";
-        // data_matrix.show();
-        // cout<<"\n-------------------------------------------------------\n";
-        
         cipher = (data_matrix * KeyMatrix).unroll();
         for(int i=0; i<input_file.length(); ++i)
             if(isalpha(input_file[i]))
@@ -289,6 +283,7 @@ int main() try
     Hill_Cipher hl("fird");
     hl.encrypt_file("a.txt", "b.txt");
     hl.decrypt_file("b.txt", "c.txt");
+    
     // string k; int a;
     // string i, o;
     // cout<<"Hello! --"<<endl;
