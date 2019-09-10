@@ -40,12 +40,14 @@ LONG mod_mul_inv(LONG a)
     LONG ans=1, num = mod_plain(a);
     while((num*ans) % CHAR_SET_SIZE != 1)
     {
+        cout<<"\nx: "<<ans<<" num*ans: "<<num*ans<<" mod 26: "<<(num*ans) % CHAR_SET_SIZE<<endl;
         if(ans == CHAR_SET_SIZE -1)
             throw string(
                 "Invalid key, modular multiplicative inverse does not exist"
             );
         ++ans;
     }
+    cout<<"\nModular mul inverse: "<<ans<<endl;
     return ans;
 }
 
@@ -92,7 +94,7 @@ private:
             D += sign * mat[0][i] * determinant(
                 co_factor(mat, 0, i, size1), size1 - 1
             );
-        return D; 
+        return D;
     }
 public:
     LONG size() { return mat.size(); }
@@ -104,7 +106,9 @@ public:
                 return false;
         return true;
     }
-    LONG determinant() { return determinant(mat, mat.size()); }
+    LONG determinant() { 
+        cout<<"\nDeterminant: "<<determinant(mat, mat.size())<<endl;
+        return determinant(mat, mat.size()); }
     Matrix adjoint()
     {
         if(!check_square())
@@ -120,10 +124,12 @@ public:
         for(int j=0; j<mat.size(); ++j) 
         {
             sign = ((i+j)%2)? -1: 1;
-            adj.mat[j][i] = sign*determinant(co_factor(
-                mat, i, j, mat.size()), mat.size()-1
+            adj.mat[j][i] = sign*determinant(
+                co_factor(mat, i, j, mat.size()), mat.size()-1
             ); 
         }
+        cout<<"\nAdjoint\n";
+        adj.show();
         return adj;
     }
     Matrix inverse()
@@ -184,32 +190,33 @@ class Hill_Cipher
 public:
     Hill_Cipher(string key_)
     {
-        int x = 0, y = 0, p = 0;
-        unordered_map<char, bool> validity_map;
+        // int x = 0, y = 0, p = 0;
+        // unordered_map<char, bool> validity_map;
         KeyMatrix = Matrix(2);
-        for(int i=0; i<key_.length(); ++i)
-            if(!isalpha(key_[i]))
-                throw "Invalid key!!\n";
-            else
-                key_[i] = toupper(key_[i]);
-        
-        for(char  ch : key_)
-            if(!validity_map[ch])
-            {
-                if(ch == 'I' || ch == 'J')
-                    KeyMatrix.mat[x][y] = (int)('I'-LOWER_LIMIT), validity_map['I'] = true;     
-                else
-                    KeyMatrix.mat[x][y] = (int)(ch-LOWER_LIMIT), validity_map[ch] = true;
-                ++y;
-                if(y == KeyMatrix.size())
-                    y = 0, ++x;
-            }
-        for(int i=x; i<KeyMatrix.size(); ++i)
-            for(int j = (i == x)? y: 0; j<KeyMatrix.size(); ++j, ++p)
-                if(!validity_map[p+'A'])
-                    KeyMatrix.mat[i][j] = (int)(p+'A'-LOWER_LIMIT);
-                else
-                    --j;
+        // for(int i=0; i<key_.length(); ++i)
+        //     if(!isalpha(key_[i]))
+        //         throw "Invalid key!!\n";
+        //     else
+        //         key_[i] = toupper(key_[i]);
+        // for(char  ch : key_)
+        //     if(!validity_map[ch])
+        //     {
+        //         if(ch == 'I' || ch == 'J')
+        //             KeyMatrix.mat[x][y] = (int)('I'-LOWER_LIMIT), validity_map['I'] = true;     
+        //         else
+        //             KeyMatrix.mat[x][y] = (int)(ch-LOWER_LIMIT), validity_map[ch] = true;
+        //         ++y;
+        //         if(y == KeyMatrix.size())
+        //             y = 0, ++x;
+        //     }
+        // for(int i=x; i<KeyMatrix.size(); ++i)
+        //     for(int j = (i == x)? y: 0; j<KeyMatrix.size(); ++j, ++p)
+        //         if(!validity_map[p+'A'])
+        //             KeyMatrix.mat[i][j] = (int)(p+'A'-LOWER_LIMIT);
+        //         else
+        //             --j;
+        KeyMatrix.mat[0] = {7, 3};
+        KeyMatrix.mat[1] = {2, 5};
         if(KeyMatrix.determinant() == 0)
             throw "Invalid Key, determinat zero";
         InvKeyMatrix = KeyMatrix.inverse();
@@ -250,6 +257,9 @@ public:
         for(int i=0; i<input_file.length(); ++i)
             if(isalpha(input_file[i]))
                 input_file[i] = (char)((cipher[p++]%CHAR_SET_SIZE)+LOWER_LIMIT);
+        cout<<"\nCipher\n";
+        for(int i : cipher)
+            cout<<mod_plain(i)<<" ";
         write_file(output_file, input_file);
     }
     void decrypt_file(string input_file, string output_file)
@@ -280,10 +290,10 @@ public:
 
 int main() try
 { 
-    Hill_Cipher hl("fird");
-    hl.encrypt_file("a.txt", "b.txt");
-    hl.decrypt_file("b.txt", "c.txt");
-    
+    // Hill_Cipher hl("fird");
+    // hl.encrypt_file("a.txt", "b.txt");
+    // hl.decrypt_file("b.txt", "c.txt");
+    cout<<"A"<<mod_mul_inv(1);
     // string k; int a;
     // string i, o;
     // cout<<"Hello! --"<<endl;

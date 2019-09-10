@@ -149,6 +149,12 @@ public:
                 u_data += ch;
         for(int i=0; i<u_data.length(); i+=2)
         {
+            // if(u_data[i] == 'T' && u_data[i+1] == 'T')
+            // {
+            //     u_data[i] = 't';
+            //     u_data[i+1] = 't';
+            //     continue;    
+            // }
             char_pair temp(u_data[i], u_data[i+1]);
             u_data[i] = decrypt_map[temp].first;
             u_data[i+1] = decrypt_map[temp].second;
@@ -156,38 +162,39 @@ public:
         for(int i=0; i<input_file.length(); ++i)
             if(isalpha(input_file[i]))
                 input_file[i] = u_data[p++];
+        cout<<input_file;
         write_file(output_file, input_file);
     }
 };
 
 int main() try
 {
-    // Play_Fair_Cipher pf("ASDFg");
-    // pf.encrypt_file("a.txt", "b.txt");
-    // pf.decrypt_file("b.txt", "c.txt");
-    string k; int a;
-    string i, o;
-    cout<<"Hello! --"<<endl;
-    cout<<"Enter key file: "; cin>>k;
-    Play_Fair_Cipher cc(read_file(k));
-    cout<<"Enter Input file: ";
-    cin>>i;
-    cout<<"Enter Output file: ";
-    cin>>o;
-    cout<<"--------------------"<<endl
-        <<"1. Encrypt"<<endl
-        <<"2. Decrypt"<<endl
-        <<"\tChoose: ";
-    cin>>a;
-    if(a!=1 && a!=2)
-    {
-        cout<<"Invalid choice.";
-        return 0;
-    }
-    if(a==1)
-        cc.encrypt_file(i, o);
-    else
-        cc.decrypt_file(i, o);
+    Play_Fair_Cipher pf("cryptography");
+    pf.encrypt_file("a.txt", "b.txt");
+    pf.decrypt_file("b.txt", "c.txt");
+    // string k; int a;
+    // string i, o;
+    // cout<<"Hello! --"<<endl;
+    // cout<<"Enter key file: "; cin>>k;
+    // Play_Fair_Cipher cc(read_file(k));
+    // cout<<"Enter Input file: ";
+    // cin>>i;
+    // cout<<"Enter Output file: ";
+    // cin>>o;
+    // cout<<"--------------------"<<endl
+    //     <<"1. Encrypt"<<endl
+    //     <<"2. Decrypt"<<endl
+    //     <<"\tChoose: ";
+    // cin>>a;
+    // if(a!=1 && a!=2)
+    // {
+    //     cout<<"Invalid choice.";
+    //     return 0;
+    // }
+    // if(a==1)
+    //     cc.encrypt_file(i, o);
+    // else
+    //     cc.decrypt_file(i, o);
     cout<<"Done";
     return 0;
 }

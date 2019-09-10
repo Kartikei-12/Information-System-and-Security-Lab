@@ -69,7 +69,7 @@ public:
 
 int main() try
 {
-    Vegenere_Cipher hl("fird");
+    Vegenere_Cipher hl("ENG");
     hl.encrypt_file("a.txt", "b.txt");
     hl.decrypt_file("b.txt", "c.txt");
     // string k; int a;
