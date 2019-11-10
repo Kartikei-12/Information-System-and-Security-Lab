@@ -23,15 +23,6 @@
 #define exception std::exception
 
 void print() { cout<<endl; }
-template <
-    template <typename, typename> class ContainerType,
-    typename ValueType,
-    typename AllocType
->
-void print(const ContainerType<ValueType, AllocType>& v) {
-    for(ValueType i : v) cout<<i<<" ";
-    cout<<endl;
-}
 template<typename T, typename... Rest>
 void print(T t, Rest... rs) { cout<<t<<" "; print(rs...); }
 
@@ -64,7 +55,6 @@ BOOL_VECTOR to_bits(int64_t a, const int size = MAX_BITS_SIZE)
     ans_.clear(); ans.clear();
     
     int64_t t = a;
-    
     while(a)
     {
         ans.push_back(a%2);
@@ -73,9 +63,7 @@ BOOL_VECTOR to_bits(int64_t a, const int size = MAX_BITS_SIZE)
     
     int temp = ( (size-ans.size()) > 0 )? (size-ans.size()) : 0;
     while(temp--)
-    {
-        ans.push_back(false);   
-    }
+        ans.push_back(false);
     
     for(int i = ans.size()-1; i>=0; --i)
         ans_.push_back(ans[i]);
@@ -190,26 +178,7 @@ string decrypt(string file)
 }
 
 int main() try
-{
-    
-    // IMAGE image_i_("plain.png");
-    // print(image_i_.width());
-    // print((int)image_i_(0, 10, 0, 0));
-    // save_image(image_i_);
-
-    // IMAGE a = encrypt("Hey how you doing", "plain.png");
-    // save_image(a, "encrypt_plain.png");
-    
-    // IMAGE a = load_image(), b;
-    // print(a.width(), a.height());
-    // const unsigned char c[] = {255, 0, 0};
-    // for(int i=0; i<500; ++i)
-    // for(int j=0; j<500; ++j)
-    // {
-    //     a.draw_point(i, j, 0, c, 1.0);
-    // }
-    // save_image(a, "b_plain.png");
-    
+{   
     string file = input<string>("Enter input file: ");
     if(!file_exist(file))
         throw string("Input file do not exist.");
@@ -217,7 +186,7 @@ int main() try
     if(choice == 1)
     {
         if(file_exist("encrypt_"+file))
-            throw string("Iutput file exist, cannot overwrite.");
+            throw string("Output file exist, cannot overwrite.");
         string message = read_file(input<string>("Enter message file: "));
         save_image( encrypt(message, file), "encrypt_"+file);
     }
