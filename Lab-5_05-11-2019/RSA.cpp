@@ -6,7 +6,6 @@
 #define endl std::endl
 #define vector std::vector
 #define string std::string
-#define fstream std::fstream
 #define exception std::exception
 
 #define BOOL_VECTOR vector<bool>
@@ -16,22 +15,22 @@
 #define PRIME_LIST_SIZE 545
 #define ALPHABET string("AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789~`!@#$^&*()_+=-{}|:<>?[];', ./")
 
-// void print() { cout<<endl; }
-// void print__(auto a) { cout<<a; }
-// void print__(string a) { cout<<a; };
-// template <
-//     template <typename, typename...> class ContainerType,
-//     typename ValueType,
-//     typename... Args
-// >
-// void print__(const ContainerType<ValueType, Args...>& c)
-// {
-//     cout<<"[ ";
-//     for(const ValueType& v : c) { print__(v); cout<<", "; }
-//     cout<<"]"<<endl;
-// }
-// template<typename T, typename... Rest>
-// void print(T t, Rest... rs) { print__(t); cout<<" "; print(rs...); }
+void print() { cout<<endl; }
+void print__(auto a) { cout<<a; }
+void print__(string a) { cout<<a; };
+template <
+    template <typename, typename...> class ContainerType,
+    typename ValueType,
+    typename... Args
+>
+void print__(const ContainerType<ValueType, Args...>& c)
+{
+    cout<<"[ ";
+    for(const ValueType& v : c) { print__(v); cout<<", "; }
+    cout<<"]"<<endl;
+}
+template<typename T, typename... Rest>
+void print(T t, Rest... rs) { print__(t); cout<<" "; print(rs...); }
 
 string read_file(string file_name)
 {
@@ -92,19 +91,18 @@ BIG_INT mod_Exp(BIG_INT b, BIG_INT e, BIG_INT m)
 //Sieve Of Eratosthenes
 INT_VECTOR getSieveOfEratosthenes(BIG_INT max)
 {
-    BIG_INT sz = max;
     BOOL_VECTOR primes(max, true);
     
-    for(BIG_INT i = 3; i < sz ; i+=2)
+    for(BIG_INT i = 3; i < max ; i+=2)
         if(primes[i]) 
-            for(int j = i*i; j<sz; j+=i)
+            for(int j = i*i; j<max; j += i)
                 primes[j] = false;
     
     INT_VECTOR ret;
     ret.reserve(primes.size()/2);
     
     ret.push_back(2);
-    for(BIG_INT i=3; i<sz; i+=2)
+    for(BIG_INT i=3; i<max; i+=2)
         if(primes[i])
             ret.push_back(i);
     return ret;
@@ -124,7 +122,7 @@ public:
     }
     KEY(BIG_INT puK, BIG_INT prK, BIG_INT mN):
         publicK(puK), privateK(prK), modN(mN) {;}
-    
+
     static vector<KEY> generate_keys()
     {
         bool success = false;
@@ -175,17 +173,20 @@ public:
                         break;
                     }
                 if(success)
-                    kList.push_back(KEY(publicK, privateK, modulasN));
+                {
+                    KEY _k_(publicK, privateK, modulasN);
+                    if(std::find(kList.begin(), kList.end(), _k_) == kList.end())
+                        kList.push_back(_k_);
+                }
                 ++attempt;
 
-                if(kList.size() == 10000)
+                if(kList.size() == 2000)
                 {
-                    // print("Prime numbers:", primes.size());
-                    // print("Valid keys:", kList.size());
-                    // print("Total tested:", attempt);
+                    print("Prime numbers:", primes.size());
+                    print("Valid keys:", kList.size());
+                    print("Total tested:", attempt);
                     return kList;
                 }
-
             }
         }
         return kList;
@@ -193,12 +194,23 @@ public:
     friend std::ostream& operator<<(std::ostream& os, KEY const& obj);
     friend BIG_INT RSA_encrypt(BIG_INT, KEY& );
     friend BIG_INT RSA_decrypt(BIG_INT, KEY& );
+    friend bool operator==(KEY k1, KEY k2);
 };
 std::ostream& operator<<(std::ostream& os, KEY const& obj)
 {
-    cout<<"Public Key:"<<obj.publicK<<" Private Key:"<<obj.privateK<<" Modulas N:"<<obj.modN;
-    // print("Public Key:", obj.publicK, "Private Key:", obj.privateK, "Modulas N:", obj.modN);
+    // cout<<"Public Key:"<<obj.publicK<<" Private Key:"<<obj.privateK<<" Modulas N:"<<obj.modN;
+    print("Public Key:", obj.publicK, "Private Key:", obj.privateK, "Modulas N:", obj.modN);
     return os;
+}
+bool operator==(KEY k1, KEY k2)
+{
+    if(
+        k1.publicK == k2.publicK &&
+        k1.privateK == k2.privateK &&
+        k1.modN == k2.modN
+    )
+        return true;
+    return false;
 }
 
 BIG_INT RSA_encrypt(BIG_INT data, KEY& k) {
@@ -227,55 +239,55 @@ string RSA_decrypt(string data, KEY& k)
 
 int main() try
 {
-    // print("Hello World!");
-    // vector<KEY> keys = KEY::generate_keys();
-    // KEY k = keys[__random__(keys.size() - 1)];
-    // print(k);
-    // string en = RSA_encrypt("Hello World", k);
-    // print("**", en, "**");
-    // string de = RSA_decrypt(en, k);
-    // print(de);
+    print("Hello World!");
+    vector<KEY> keys = KEY::generate_keys();
+    KEY k = keys[__random__(keys.size() - 1)];
+    print(k);
+    string en = RSA_encrypt("Hello World", k);
+    print("**", en, "**");
+    string de = RSA_decrypt(en, k);
+    print(de);
 
-    int choice;
-    BIG_INT p, mN;
-    string inFile, outFile, data;
+    // int choice;
+    // BIG_INT p, mN;
+    // string inFile, outFile, data;
 
-    cout<<"------------------** Welcome to RSA **------------------"<<endl
-        <<"1. Encrypt"<<endl
-        <<"2. Decrypt"<<endl
-        <<"3. Generate key"<<endl
-        <<"0. Exit"<<endl
-        <<"\t Please choose: ";
-    cin>>choice;
+    // cout<<"------------------** Welcome to RSA **------------------"<<endl
+    //     <<"1. Encrypt"<<endl
+    //     <<"2. Decrypt"<<endl
+    //     <<"3. Generate key"<<endl
+    //     <<"0. Exit"<<endl
+    //     <<"\t Please choose: ";
+    // cin>>choice;
 
-    if(choice == 0)
-        cout<<"Byeeeeee";
-    else if (choice == 1)
-    {
-        cout<<"Enter input file name: "; cin>>inFile;
-        cout<<"Enter output file name: "; cin>>outFile;
-        data = read_file(inFile);
-        cout<<"Enter PUBLIC KEY(public key, modulas N): "; cin>>p>>mN;
-        KEY ke(p, mN, true);
-        write_file(outFile, RSA_encrypt(data, ke));
-    }
-    else if (choice == 2)
-    {
-        cout<<"Enter input file name: "; cin>>inFile;
-        cout<<"Enter output file name: "; cin>>outFile;
-        data = read_file(inFile);
-        cout<<"Enter PRIVATE KEY(private key, modulas N): "; cin>>p>>mN;
-        KEY kd(p, mN, false);
-        write_file(outFile, RSA_decrypt(data, kd));
-    }
-    else if(choice == 3)
-    {
-        vector<KEY> keys = KEY::generate_keys();
-        KEY k = keys[__random__(keys.size() - 1)];
-        cout<<"Key: "<<k;
-    }
-    else
-        cerr<<"Invalid choice exiting.";
+    // if(choice == 0)
+    //     cout<<"Byeeeeee";
+    // else if (choice == 1)
+    // {
+    //     cout<<"Enter input file name: "; cin>>inFile;
+    //     cout<<"Enter output file name: "; cin>>outFile;
+    //     data = read_file(inFile);
+    //     cout<<"Enter PUBLIC KEY(public key, modulas N): "; cin>>p>>mN;
+    //     KEY ke(p, mN, true);
+    //     write_file(outFile, RSA_encrypt(data, ke));
+    // }
+    // else if (choice == 2)
+    // {
+    //     cout<<"Enter input file name: "; cin>>inFile;
+    //     cout<<"Enter output file name: "; cin>>outFile;
+    //     data = read_file(inFile);
+    //     cout<<"Enter PRIVATE KEY(private key, modulas N): "; cin>>p>>mN;
+    //     KEY kd(p, mN, false);
+    //     write_file(outFile, RSA_decrypt(data, kd));
+    // }
+    // else if(choice == 3)
+    // {
+    //     vector<KEY> keys = KEY::generate_keys();
+    //     KEY k = keys[__random__(keys.size() - 1)];
+    //     cout<<"Key: "<<k;
+    // }
+    // else
+    //     cerr<<"Invalid choice exiting.";
     return 0;
 }
 catch(string &e) { cerr<<"Error: "<<e<<endl; }
